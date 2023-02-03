@@ -1,6 +1,6 @@
 
+import React from 'react'
 import { StatusBar } from 'expo-status-bar'
-import React, { useCallback, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { uuidv4 } from './src/utils/uuid'
@@ -9,21 +9,20 @@ import { Focus } from './src/features/focus/Focus'
 import { FocusHistory } from './src/features/focus/FocusHistory'
 
 
-// expo requires a default exports
-export default function App() {
+const App: React.FC = () => {
 
-	const [focusSubject, setFocusSubject] = useState(null)
-	const [focusHistory, setFocusHistory] = useState([])
+	const [ focusSubject, setFocusSubject ] = React.useState(null)
+	const [ focusHistory, setFocusHistory ] = React.useState([])
 
-	const saveFocusHistory = async () => {
+	const saveFocusHistory = React.useCallback(async () => {
 		try {
 			await AsyncStorage.setItem('focusHistory', JSON.stringify(focusHistory))
 		} catch (e) {
-			console.log(e)
+			console.error(e)
 		}
-	}
+	}, [])
 
-	const loadFocusHistory = async () => {
+	const loadFocusHistory = React.useCallback(async () => {
 		try {
 			const history = await AsyncStorage.getItem('focusHistory')
 			const focusHistory = JSON.parse(history)
@@ -33,18 +32,17 @@ export default function App() {
 		} catch (e) {
 			console.error(e)
 		}
-	}
+	}, [])
 
-	useEffect(() => {
+	React.useEffect(() => {
 		loadFocusHistory()
 	}, [])
 
-	useEffect(() => {
-		console.log(focusHistory)
+	React.useEffect(() => {
 		saveFocusHistory()
 	}, [focusHistory])
 
-	const clearSubjectHandler = useCallback(() => {
+	const clearSubjectHandler = React.useCallback(() => {
 		setFocusHistory([
 			...focusHistory,
 			{ subject: focusSubject, status: 0, key: uuidv4() }
@@ -52,7 +50,7 @@ export default function App() {
 		setFocusSubject(null)
 	}, [focusHistory])
 
-	const onTimerEndHandler = useCallback(() => {
+	const onTimerEndHandler = React.useCallback(() => {
 		setFocusHistory([
 			...focusHistory,
 			{ subject: focusSubject, status: 1, key: uuidv4() }
@@ -64,24 +62,27 @@ export default function App() {
 		<View style={styles.container}>
 			<StatusBar style='light' />
 			{focusSubject 
-			? (
-				<Timer
-					subject={focusSubject}
-					clearSubject={clearSubjectHandler}
-					onTimerEnd={onTimerEndHandler}
-				/>
-			) : (
-				<View style={styles.focusContainer}>
-					<Focus addSubject={setFocusSubject} />
-					<FocusHistory
-						focusHistory={focusHistory}
-						setFocusHistory={setFocusHistory}
+				? (
+					<Timer
+						subject={focusSubject}
+						clearSubject={clearSubjectHandler}
+						onTimerEnd={onTimerEndHandler}
 					/>
-				</View>
-			)}
+				) : (
+					<View style={styles.focusContainer}>
+						<Focus addSubject={setFocusSubject} />
+						<FocusHistory
+							focusHistory={focusHistory}
+							setFocusHistory={setFocusHistory}
+						/>
+					</View>
+				)}
 		</View>
 	)
 }
+
+// expo requires a default exports
+export default App
 
 const styles = StyleSheet.create({
 	container: {

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, Vibration } from 'react-native'
+import React from 'react'
+import { View, StyleSheet, Vibration, ImageStyle, TextStyle, ViewStyle, StyleProp, RegisteredStyle, FlexStyle } from 'react-native'
 import { ProgressBar, Text } from 'react-native-paper'
 import { Audio } from 'expo-av'
 import { useKeepAwake } from 'expo-keep-awake'
@@ -14,20 +14,20 @@ export const Timer = ({ subject, clearSubject, onTimerEnd }) => {
   
   const soundObject = new Audio.Sound()
 
-  const [minutes, setMinutes] = useState(0.1)
-  const [isStarted, setStarted] = useState(false)
-  const [pauseCounter, setPauseCounter] = useState(0)
-  const [progress, setProgress] = useState(1)
+  const [ minutes, setMinutes ] = React.useState<number>(0.1)
+  const [ isStarted, setStarted ] = React.useState<boolean>(false)
+  const [ pauseCounter, setPauseCounter ] = React.useState(0)
+  const [ progress, setProgress ] = React.useState<number>(1)
 
-  const onProgress = p => {
+  const onProgress = React.useCallback((p: number): void => {
     setProgress(p / 100)
-  }
+  }, [])
 
-  const onPause = () => {
+  const onPause = React.useCallback((): void => {
     setPauseCounter(pauseCounter + 1)
-  }
+  }, [pauseCounter])
 
-  const onEnd = async () => {
+  const onEnd = React.useCallback(async (): Promise<void> => {
     try {
       await soundObject.loadAsync(require('../../../assets/bell.mp3'))
       await soundObject.playAsync()
@@ -43,17 +43,17 @@ export const Timer = ({ subject, clearSubject, onTimerEnd }) => {
     setStarted(false)
     setMinutes(20)
     onTimerEnd()
-  }
+  }, [])
 
-  const changeTime = (min) => () => {
+  const changeTime = (min: number) => {
     setProgress(1)
     setStarted(false)
     setMinutes(min)
   }
 
-  useEffect(() => {
-    return async () => {
-      await soundObject.unloadAsync()
+  React.useEffect(() => {
+    return () => {
+      soundObject.unloadAsync()
     }
   }, [])
 
@@ -80,11 +80,11 @@ export const Timer = ({ subject, clearSubject, onTimerEnd }) => {
         />
       </View>
 
-      <View style={styles.buttonWrapper()}>
+      <View style={styles.buttonWrapper}>
         <Timing changeTime={changeTime} />
       </View>
 
-      <View style={styles.buttonWrapper({ flex: 0.3 })}>
+      <View style={styles.buttonWrapper}>
         {!isStarted ? (
           <RoundedButton title='start' onPress={() => setStarted(true)} />
         ) : (
@@ -98,6 +98,12 @@ export const Timer = ({ subject, clearSubject, onTimerEnd }) => {
   )
 }
 
+// type Style = {
+//   container: ViewStyle;
+//   title: TextStyle;
+//   icon: ImageStyle;
+// };
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#252250',
@@ -110,13 +116,12 @@ const styles = StyleSheet.create({
   },
   title: { color: 'white', textAlign: 'center' },
   task: { color: 'white', fontWeight: 'bold', textAlign: 'center' },
-  buttonWrapper: ({ flex = 0.25, padding = 15, justifyContent = 'center' } = {}) => ({
-    flex,
+  buttonWrapper: {
+    flex: .3,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent,
-    padding,
-  }),
+    padding: 15,
+  },
   clearSubject: {
     paddingBottom: 25,
     paddingLeft: 25,

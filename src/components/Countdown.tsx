@@ -4,10 +4,20 @@ import { Text, StyleSheet } from 'react-native'
 import { fontSizes, paddingSizes } from '../utils/sizes'
 
 
-const minToMs = (min) => min * 1000 * 60
-const formatTime = (time) => (time < 10 ? `0${time}` : time)
+const minToMs = (min: number): number => min * 1000 * 60
+const formatTime = (time: number): string => (time < 10 ? `0${time}` : String(time))
 
-export const Countdown = ({ minutes = 20, isPaused, onStart = () => {}, onPause = () => {}, onEnd = () => {}, onProgress = () => {} }) => {
+
+interface Props {
+  minutes: number
+  isPaused: boolean
+  onStart?: () => void
+  onPause: () => void
+  onEnd: () => void
+  onProgress: (p: number) => void
+}
+
+export const Countdown: React.FC<Props> = ({ minutes = 20, isPaused, onStart = () => {}, onPause = () => {}, onEnd = () => {}, onProgress = () => {} }) => {
   
   const [ms, setMs] = useState(minToMs(minutes))
   const interval = useRef(null)
