@@ -17,9 +17,9 @@ interface Props {
   onProgress: (p: number) => void
 }
 
-export const Countdown: React.FC<Props> = ({ minutes = 20, isPaused, onStart = () => {}, onPause = () => {}, onEnd = () => {}, onProgress = () => {} }) => {
+export const Countdown: React.FC<Props> = ({ minutes = 20, isPaused, onStart, onPause, onEnd, onProgress }) => {
   
-  const [ms, setMs] = useState(minToMs(minutes))
+  const [ ms, setMs ] = useState(minToMs(minutes))
   const interval = useRef(null)
 
   const countDown = () => {

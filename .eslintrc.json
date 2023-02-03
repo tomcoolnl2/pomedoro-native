@@ -1,0 +1,12 @@
+{
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint"],
+    "rules": {
+        "no-empty-function": ["error", { "allow": ["arrowFunctions"] }]
+        // "indent": ["error", 4],
+        // "react/jsx-indent": ["error", 4],
+        // "react/jsx-indent-props": ["error", 4]
+    },
+    "root": true
+}

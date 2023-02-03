@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Vibration, ImageStyle, TextStyle, ViewStyle, StyleProp, RegisteredStyle, FlexStyle } from 'react-native'
+import { View, StyleSheet, Vibration } from 'react-native'
 import { ProgressBar, Text } from 'react-native-paper'
 import { Audio } from 'expo-av'
 import { useKeepAwake } from 'expo-keep-awake'
@@ -7,6 +7,8 @@ import { useKeepAwake } from 'expo-keep-awake'
 import { RoundedButton } from '../../components/RoundedButton'
 import { Countdown } from '../../components/Countdown'
 import { Timing } from './Timing'
+
+import { bellSound } from '../../../assets/bell.mp3';
 
 export const Timer = ({ subject, clearSubject, onTimerEnd }) => {
   
@@ -29,7 +31,7 @@ export const Timer = ({ subject, clearSubject, onTimerEnd }) => {
 
   const onEnd = React.useCallback(async (): Promise<void> => {
     try {
-      await soundObject.loadAsync(require('../../../assets/bell.mp3'))
+      await soundObject.loadAsync(bellSound)
       await soundObject.playAsync()
       const interval = setInterval(() => Vibration.vibrate(5000), 1000)
       setTimeout(() => {
@@ -97,12 +99,6 @@ export const Timer = ({ subject, clearSubject, onTimerEnd }) => {
     </View>
   )
 }
-
-// type Style = {
-//   container: ViewStyle;
-//   title: TextStyle;
-//   icon: ImageStyle;
-// };
 
 const styles = StyleSheet.create({
   container: {
