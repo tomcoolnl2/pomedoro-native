@@ -5,9 +5,7 @@ import { StyleSheet, View } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import type { FocusSubject } from './src/model'
 import { uuidv4 } from './src/utils/uuid'
-import { Timer } from './src/features/timer/Timer'
-import { Focus } from './src/features/focus/Focus'
-import { FocusHistory } from './src/features/focus/FocusHistory'
+import { Timer, AddSubject, SubjectHistory } from './src/components'
 
 
 // expo requires a default exports
@@ -16,7 +14,7 @@ export const App: React.FC = () => {
     const [ currentSubject, setCurrentSubject ] = React.useState<string>(null)
     const [ subjectHistory, setSubjectHistory ] = React.useState<FocusSubject[]>([])
 
-    const saveFocusHistory = React.useCallback(async () => {
+    const saveSubjectHistory = React.useCallback(async () => {
         try {
             await AsyncStorage.setItem('subjectHistory', JSON.stringify(subjectHistory))
         } catch (e) {
@@ -24,7 +22,7 @@ export const App: React.FC = () => {
         }
     }, [subjectHistory])
 
-    const loadFocusHistory = React.useCallback(async () => {
+    const loadSubjectHistory = React.useCallback(async () => {
         try {
             const history = await AsyncStorage.getItem('subjectHistory')
             const subjectHistory = JSON.parse(history)
@@ -37,11 +35,11 @@ export const App: React.FC = () => {
     }, [])
 
     React.useEffect(() => {
-        loadFocusHistory()
+        loadSubjectHistory()
     }, [])
 
     React.useEffect(() => {
-        saveFocusHistory()
+        saveSubjectHistory()
     }, [subjectHistory])
 
     const clearSubjectHandler = React.useCallback(() => {
@@ -72,10 +70,10 @@ export const App: React.FC = () => {
                     />
                 ) : (
                     <View style={styles.focusContainer}>
-                        <Focus addSubject={setCurrentSubject} />
-                        <FocusHistory
-                            focusHistory={subjectHistory}
-                            setFocusHistory={setSubjectHistory}
+                        <AddSubject addSubject={setCurrentSubject} />
+                        <SubjectHistory
+                            subjectHistory={subjectHistory}
+                            setSubjectHistory={setSubjectHistory}
                         />
                     </View>
                 )}

@@ -4,11 +4,8 @@ import { View, StyleSheet, Vibration } from 'react-native'
 import { ProgressBar, Text } from 'react-native-paper'
 import { Audio } from 'expo-av'
 import { useKeepAwake } from 'expo-keep-awake'
-
-import { RoundedButton } from '../../components/RoundedButton'
-import { Countdown } from '../../components/Countdown'
-import { Timing } from './Timing'
-import { bellSound } from '../../../assets/bell.mp3';
+import { Button, Countdown, TimerOptions } from './'
+import { bellSound } from '../../assets/bell.mp3';
 
 
 const ONE_SECOND_IN_MS = 1000
@@ -90,14 +87,14 @@ export const Timer: React.FC<Props> = ({ subject, clearSubject, onTimerEnd }) =>
             </View>
 
             <View style={styles.buttonWrapper}>
-                <Timing changeTime={changeTime} />
+                <TimerOptions changeTime={changeTime} />
             </View>
 
             <View style={styles.buttonWrapper}>
-                <RoundedButton title={!isStarted ? 'start' : 'pause'} onPressHandler={() => setIsStarted(!isStarted)} />
+                <Button title={!isStarted ? 'start' : 'pause'} onPressHandler={() => setIsStarted(!isStarted)} />
             </View>
             <View style={styles.clearSubject}>
-                <RoundedButton title='-' size={50} onPressHandler={clearSubject} />
+                <Button title='-' size={50} onPressHandler={clearSubject} />
             </View>
         </View>
     )

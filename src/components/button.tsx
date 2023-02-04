@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native'
-import * as Theme from '../utils/theme'
+import * as Theme from '../theme'
 
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
     title: string
 }
 
-export const RoundedButton: React.FC<Props> = ({ style = {}, textStyle = {}, size = 125, onPressHandler, title }) => {
+export const Button: React.FC<Props> = ({ style = {}, textStyle = {}, size = 125, onPressHandler, title }) => {
     return (
         <TouchableOpacity
             style={[styles(size).radius, style]}
@@ -36,6 +36,6 @@ const styles = (size: number) =>
         },
         text: { 
             color: '#fff',
-            fontSize: Theme.fontSizes.md
+            fontSize: Theme.fontSize.md
         }
     })

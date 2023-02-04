@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { Text, StyleSheet } from 'react-native'
-import { fontSizes, paddingSizes } from '../utils/theme'
+import { fontSize, padding } from '../theme'
 
 
 const minToMs = (min: number): number => min * 1000 * 60
@@ -66,10 +66,10 @@ export const Countdown: React.FC<Props> = ({ minutes = 20, isPaused, onPause, on
 }
 const styles = StyleSheet.create({
     text: {
-        fontSize: fontSizes.xxxl,
+        fontSize: fontSize.xxxl,
         fontWeight: 'bold',
         color: '#fff',
-        padding: paddingSizes.lg,
+        padding: padding.lg,
         backgroundColor: 'rgba(94, 132, 226, 0.3)',
     }
 })

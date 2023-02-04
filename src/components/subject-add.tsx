@@ -3,19 +3,19 @@
 import React from 'react'
 import { TextInput } from 'react-native-paper'
 import { View, StyleSheet, Text } from 'react-native'
-import { RoundedButton } from '../../components/RoundedButton'
-import * as Theme from '../../utils/theme'
+import { Button } from './button'
+import * as Theme from '../theme'
 
 
 interface Props {
-    addSubject: (focusItem: string) => void
+    addSubject: (subjectItem: string) => void
 }
 
-export const Focus: React.FC<Props> = ({ addSubject }) => {
+export const AddSubject: React.FC<Props> = ({ addSubject }) => {
   
     const [ subject, setSubject ] = React.useState<string>(null)
 
-    const onSubmitEditingHandler = React.useCallback(({ nativeEvent: { text } }) => {
+    const onSubmitSubject = React.useCallback(({ nativeEvent: { text } }) => {
         setSubject(text)
     }, [])
 
@@ -31,12 +31,12 @@ export const Focus: React.FC<Props> = ({ addSubject }) => {
                     style={styles.textInput}
                     maxLength={50}
                     value={subject}
-                    onSubmitEditing={onSubmitEditingHandler}
+                    onSubmitEditing={onSubmitSubject}
                     onChangeText={setSubject}
                     label={'Add item'}
                 />
-                <RoundedButton
-                    style={styles.addSubject}
+                <Button
+                    style={styles.addSubjectCTA}
                     size={50}
                     title='+'
                     onPressHandler={onPressHandler}
@@ -52,18 +52,20 @@ const styles = StyleSheet.create({
     },
     titleContainer: { 
         flex: 0.5, 
-        padding: 16, 
+        padding: Theme.padding.md,
         justifyContent: 'center' 
     },
     title: {
-        color: 'white',
+        color: Theme.base.text.primary,
         fontWeight: 'bold',
-        padding: 16,
-        fontSize: Theme.fontSizes.lg,
+        padding: Theme.padding.md,
+        fontSize: Theme.fontSize.lg,
     },
-    textInput: { flex: 1 },
-    addSubject: { 
-        marginLeft: 10, 
+    textInput: { 
+        flex: 1
+    },
+    addSubjectCTA: { 
+        marginLeft: Theme.padding.md, 
         alignSelf: 'center' 
     },
 })
