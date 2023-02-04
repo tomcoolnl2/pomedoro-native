@@ -1,7 +1,7 @@
 
 import React from 'react'
-import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native'
-import * as Theme from '../theme'
+import { TouchableOpacity, Text, ViewStyle, TextStyle, StyleSheet } from 'react-native'
+import { Theme } from '../theme'
 
 
 interface Props {
@@ -14,28 +14,21 @@ interface Props {
 
 export const Button: React.FC<Props> = ({ style = {}, textStyle = {}, size = 125, onPressHandler, title }) => {
     return (
-        <TouchableOpacity
-            style={[styles(size).radius, style]}
-            onPress={onPressHandler}
-        >
+        <TouchableOpacity style={[styles(size).radius, style]} onPress={onPressHandler}>
             <Text style={[styles(size).text, textStyle]}>{title}</Text>
         </TouchableOpacity>
     )
 }
 
-const styles = (size: number) =>
-    StyleSheet.create({
-        radius: {
-            borderRadius: size / 2,
-            width: size,
-            height: size,
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderColor: '#fff',
-            borderWidth: 2,
-        },
-        text: { 
-            color: '#fff',
-            fontSize: Theme.fontSize.md
-        }
-    })
+const styles = (size: number) => StyleSheet.create({
+    radius: {
+        borderRadius: size / 2,
+        width: size,
+        height: size,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: Theme.color.cornsilk,
+        borderWidth: 2,
+    },
+    text: Theme.text
+})

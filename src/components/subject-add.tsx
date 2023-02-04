@@ -4,7 +4,7 @@ import React from 'react'
 import { TextInput } from 'react-native-paper'
 import { View, StyleSheet, Text } from 'react-native'
 import { Button } from './button'
-import * as Theme from '../theme'
+import { Theme } from '../theme'
 
 
 interface Props {
@@ -56,10 +56,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center' 
     },
     title: {
-        color: Theme.base.text.primary,
-        fontWeight: 'bold',
-        padding: Theme.padding.md,
-        fontSize: Theme.fontSize.lg,
+        ...Theme.title
     },
     textInput: { 
         flex: 1

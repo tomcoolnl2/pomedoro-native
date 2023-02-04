@@ -1,12 +1,9 @@
 
 import React from 'react'
 import { Text, StyleSheet } from 'react-native'
-import { fontSize, padding } from '../theme'
+import { Theme } from '../theme'
+import { minToMs, formatTime } from '../utils'
 
-
-const minToMs = (min: number): number => min * 1000 * 60
-
-const formatTime = (time: number): string => (time < 10 ? `0${time}` : String(time))
 
 
 interface Props {
@@ -14,7 +11,7 @@ interface Props {
   isPaused: boolean
   onPause: () => void
   onEnd: () => void
-  onProgress: (p: number) => void
+  onProgress: (progress: number) => void
 }
 
 export const Countdown: React.FC<Props> = ({ minutes = 20, isPaused, onPause, onEnd, onProgress }) => {
@@ -64,12 +61,13 @@ export const Countdown: React.FC<Props> = ({ minutes = 20, isPaused, onPause, on
         </Text>
     )
 }
+
 const styles = StyleSheet.create({
     text: {
-        fontSize: fontSize.xxxl,
+        ...Theme.text,
+        fontSize: Theme.fontSize.xxxl,
         fontWeight: 'bold',
-        color: '#fff',
-        padding: padding.lg,
-        backgroundColor: 'rgba(94, 132, 226, 0.3)',
+        padding: Theme.padding.lg,
+        backgroundColor: Theme.color.tomato,
     }
 })

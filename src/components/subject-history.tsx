@@ -1,9 +1,9 @@
 
 import React from 'react'
 import { View, StyleSheet, Text, FlatList, SafeAreaView } from 'react-native'
-import * as Theme from '../theme'
-import { Button } from './button'
 import type { FocusSubject } from '../model'
+import { Theme } from '../theme'
+import { Button } from './button'
 
 
 interface Props {
@@ -31,7 +31,7 @@ export const SubjectHistory: React.FC<Props> = ({ subjectHistory, setSubjectHist
                         renderItem={({ item }) => {
                             console.log('item', item);
                             return item.subject !== null && (
-                                <Text style={styles.historyItem}>
+                                <Text style={styles.text}>
                                     {`${item.status > 0 ? '✅' : '❌'} ${item.subject}`}
                                 </Text>
                             )
@@ -54,20 +54,17 @@ const styles = StyleSheet.create({
         flex: 0.5,
         alignItems: 'center'
     },
-    title: { 
-        fontSize: Theme.fontSize.lg, 
-        color: 'white'
-    },
-    text: { color: 'white' },
-    historyItem: {
-        color: 'white',
-        fontSize: Theme.fontSize.md
-    },
+    title: Theme.title,
+    text: Theme.text,
     clearContainer: {
         alignItems: 'center',
         padding: Theme.padding.sm
     },
-    listStyle: { width: '100%', height: '100%', paddingTop: 16 },
+    listStyle: { 
+        width: '100%', 
+        height: '100%', 
+        paddingTop: Theme.padding.md
+    },
     contentContainerStyle: {
         alignItems: 'flex-start'
     }

@@ -4,12 +4,11 @@ import { View, StyleSheet, Vibration } from 'react-native'
 import { ProgressBar, Text } from 'react-native-paper'
 import { Audio } from 'expo-av'
 import { useKeepAwake } from 'expo-keep-awake'
-import { Button, Countdown, TimerOptions } from './'
 import { bellSound } from '../../assets/bell.mp3';
+import { VIBRATION_PATTERN } from '../utils'
+import { Theme } from '../theme'
+import { Button, Countdown, TimerOptions } from './'
 
-
-const ONE_SECOND_IN_MS = 1000
-const VIBRATION_PATTERN: number[] = Array.from({ length: 5 }, _ => 1 * ONE_SECOND_IN_MS)
 
 interface Props {
     subject: string
@@ -28,9 +27,9 @@ export const Timer: React.FC<Props> = ({ subject, clearSubject, onTimerEnd }) =>
     const [ pauseCounter, setPauseCounter ] = React.useState<number>(0)
     const [ progress, setProgress ] = React.useState<number>(1)
 
-    const onProgress = (p: number) => {
-        setProgress(p / 100)
-    }
+    const onProgress = React.useCallback((progress: number) => {
+        setProgress(progress / 100)
+    }, [])
 
     const onPause = React.useCallback(() => {
         setPauseCounter(pauseCounter + 1)
@@ -75,13 +74,13 @@ export const Timer: React.FC<Props> = ({ subject, clearSubject, onTimerEnd }) =>
                 />
                 <View style={styles.currentSubject}>
                     <Text style={styles.title}>Focusing on:</Text>
-                    <Text style={styles.task}>{subject}</Text>
+                    <Text style={styles.text}>{subject}</Text>
                 </View>
             </View>
             <View>
                 <ProgressBar
                     progress={progress}
-                    color='#5E84E2'
+                    color={Theme.color.firebrick}
                     style={styles.progress}
                 />
             </View>
@@ -109,19 +108,23 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    title: { color: 'white', textAlign: 'center' },
-    task: { color: 'white', fontWeight: 'bold', textAlign: 'center' },
-    currentSubject: { padding: 50 },
-    progress: { height: 10 },
+    title: Theme.title,
+    text: Theme.text,
+    currentSubject: { 
+        padding: Theme.padding.xxl
+    },
+    progress: { 
+        height: Theme.padding.sm
+    },
     buttonWrapper: {
         flexDirection: 'row',
         flex: .3,
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 15,
+        padding: Theme.padding.md,
     },
     clearSubject: {
-        paddingBottom: 25,
-        paddingLeft: 25
+        paddingBottom: Theme.padding.lg,
+        paddingLeft: Theme.padding.lg
     },
 })
