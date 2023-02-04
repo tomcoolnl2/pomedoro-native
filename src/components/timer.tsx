@@ -84,13 +84,11 @@ export const Timer: React.FC<Props> = ({ subject, clearSubject, onTimerEnd }) =>
                     style={styles.progress}
                 />
             </View>
-
             <View style={styles.buttonWrapper}>
                 <TimerOptions changeTime={changeTime} />
             </View>
-
             <View style={styles.buttonWrapper}>
-                <Button title={!isStarted ? 'start' : 'pause'} onPressHandler={() => setIsStarted(!isStarted)} />
+                <Button title={!isStarted ? 'Start' : 'Pause'} onPressHandler={() => setIsStarted(!isStarted)} />
             </View>
             <View style={styles.clearSubject}>
                 <Button title='-' size={50} onPressHandler={clearSubject} />

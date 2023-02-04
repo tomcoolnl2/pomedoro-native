@@ -16,6 +16,8 @@ export const SubjectHistory: React.FC<Props> = ({ subjectHistory, setSubjectHist
     const clearHistory = React.useCallback(() => {
         setSubjectHistory([])
     }, [setSubjectHistory])
+    
+    console.log('subjectHistory', subjectHistory)
 
     return (
         <>
@@ -25,22 +27,21 @@ export const SubjectHistory: React.FC<Props> = ({ subjectHistory, setSubjectHist
                 </Text>
                 {subjectHistory.length > 0 
                     ? <FlatList
+                        keyExtractor={item => item.key}
                         style={styles.listStyle}
-                        contentContainerStyle={styles.contentContainerStyle}
                         data={subjectHistory}
                         renderItem={({ item }) => {
                             return item.subject !== null && (
-                                <Text style={styles.text}>
-                                    {`${item.status > 0 ? '✅' : '❌'} ${item.subject}`}
-                                </Text>
+                                <View style={styles.listItem}>
+                                    <Text>
+                                        {`${item.status > 0 ? '✅' : '❌'} ${item.subject}`}
+                                    </Text>
+                                </View>
                             )
                         }}
                     />
-                    : <Text style={styles.title}>No focus at all...</Text>
+                    : <Text style={styles.text}>No focus at all...</Text>
                 }
-                {!subjectHistory.length && (
-                    <Text style={styles.text}>Nothing yet</Text>
-                )}
             </SafeAreaView>
             <View style={styles.clearContainer}>
                 <Button size={75} title='Clear' onPressHandler={clearHistory} />
@@ -61,11 +62,19 @@ const styles = StyleSheet.create({
         padding: Theme.size.sm
     },
     listStyle: { 
-        width: '100%', 
-        height: '100%', 
+        width: '40%',
         paddingTop: Theme.size.md
     },
-    contentContainerStyle: {
-        alignItems: 'flex-start'
+    listItem: {
+        ...Theme.text,
+        ...Theme.borderRadius,
+        textShadowColor: 'transparent',
+        color: Theme.color.grey,
+        backgroundColor: Theme.color.white,
+        paddingVertical: Theme.size.sm,
+        paddingHorizontal: Theme.size.md,
+        marginTop: Theme.size.sm,
+        width: '100%',
+        textAlign: 'left'
     }
 })

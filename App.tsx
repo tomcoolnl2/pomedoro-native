@@ -49,7 +49,7 @@ const App: React.FC = () => {
             { subject: currentSubject, status: 0, key: uuidv4() }
         ])
         setCurrentSubject(null)
-    }, [subjectHistory])
+    }, [currentSubject, subjectHistory])
 
     const onTimerEndHandler = React.useCallback(() => {
         setSubjectHistory([
@@ -57,7 +57,7 @@ const App: React.FC = () => {
             { subject: currentSubject, status: 1, key: uuidv4() }
         ])
         setCurrentSubject(null)
-    }, [subjectHistory])
+    }, [currentSubject, subjectHistory])
 
     return (
         <View style={styles.container}>
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         width: Theme.size.xxxl, 
         height: Theme.size.xxxl,
         marginTop: Theme.size.xxxl,
-        alignSelf: 'center'
+        alignSelf: 'center',
     },
     subjectContainer: { 
         flex: 1, 

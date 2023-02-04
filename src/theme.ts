@@ -20,11 +20,13 @@ const textShadow = {
 }
 
 const color = {
+    grey: 'grey',
     indianred: 'indianred',
     tomato: 'tomato',
     firebrick: 'firebrick',
     cornsilk: 'cornsilk',
     wheat: 'wheat',
+    white: 'white',
 }
 
 const text = {
@@ -38,8 +40,12 @@ const title = {
     ...text,
     fontSize: fontSize.lg,
     fontWeight: 'bold',
-    size: size.md,
+    padding: size.md,
 } as TextStyle
+
+const borderRadius = {
+    borderRadius: size.sm,
+}
 
 export const Theme = {
     color,
@@ -47,4 +53,5 @@ export const Theme = {
     text,
     fontSize,
     size,
+    borderRadius,
 }

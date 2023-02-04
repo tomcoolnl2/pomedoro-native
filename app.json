@@ -8,7 +8,7 @@
     "splash": {
       "image": "./images/tomato.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "wheat"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

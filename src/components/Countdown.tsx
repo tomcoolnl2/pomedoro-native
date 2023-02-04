@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { Text, StyleSheet } from 'react-native'
+import { Text, StyleSheet, View } from 'react-native'
 import { Theme } from '../theme'
 import { minToMs, formatTime } from '../utils'
 
@@ -56,18 +56,25 @@ export const Countdown: React.FC<Props> = ({ minutes = 20, isPaused, onPause, on
     const seconds = ((ms / 1000) << 0) % 60
 
     return (
-        <Text style={styles.text}>
-            {formatTime(minute)}:{formatTime(seconds)}
-        </Text>
+        <View style={styles.container}>
+            <Text style={styles.text}>
+                {formatTime(minute)}:{formatTime(seconds)}
+            </Text>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        ...Theme.borderRadius,
+        padding: Theme.size.lg,
+        backgroundColor: Theme.color.tomato,
+        opacity: .6,
+    },
     text: {
         ...Theme.text,
         fontSize: Theme.fontSize.xxxl,
+        opacity: 1,
         fontWeight: 'bold',
-        padding: Theme.size.lg,
-        backgroundColor: Theme.color.tomato,
     }
 })

@@ -13,7 +13,7 @@ interface Props {
 
 export const AddSubject: React.FC<Props> = ({ addSubject }) => {
   
-    const [ subject, setSubject ] = React.useState<string>(null)
+    const [ subject, setSubject ] = React.useState<string>('')
 
     const onSubmitSubject = React.useCallback(({ nativeEvent: { text } }) => {
         setSubject(text)
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     },
     titleContainer: { 
         flex: 0.4, 
-        padding: Theme.size.md,
+        margin: Theme.size.md,
         justifyContent: 'center' 
     },
     title: {

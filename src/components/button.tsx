@@ -29,6 +29,7 @@ const styles = (size: number) => StyleSheet.create({
         justifyContent: 'center',
         borderColor: Theme.color.cornsilk,
         borderWidth: 2,
+        backgroundColor: 'rgba(255, 255, 255, .1)'
     },
     text: Theme.text
 })
