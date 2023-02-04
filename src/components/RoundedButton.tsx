@@ -1,21 +1,29 @@
 
 import React from 'react'
-import { TouchableOpacity, Text, StyleSheet } from 'react-native'
-import { fontSizes } from '../utils/sizes'
+import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native'
+import * as Theme from '../utils/theme'
 
 
-export const RoundedButton = ({ style = {}, textStyle = {}, size = 125, ...props }) => {
+interface Props {
+    style?: ViewStyle
+    textStyle?: TextStyle
+    size?: number
+    onPressHandler: () => void
+    title: string
+}
+
+export const RoundedButton: React.FC<Props> = ({ style = {}, textStyle = {}, size = 125, onPressHandler, title }) => {
     return (
         <TouchableOpacity
             style={[styles(size).radius, style]}
-            onPress={props.onPress}
+            onPress={onPressHandler}
         >
-            <Text style={[styles(size).text, textStyle]}>{props.title}</Text>
+            <Text style={[styles(size).text, textStyle]}>{title}</Text>
         </TouchableOpacity>
     )
 }
 
-const styles = (size) =>
+const styles = (size: number) =>
     StyleSheet.create({
         radius: {
             borderRadius: size / 2,
@@ -28,6 +36,6 @@ const styles = (size) =>
         },
         text: { 
             color: '#fff',
-            fontSize: fontSizes.md
+            fontSize: Theme.fontSizes.md
         }
     })

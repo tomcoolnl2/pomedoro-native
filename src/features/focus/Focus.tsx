@@ -1,35 +1,45 @@
 
 
-import React, { useCallback, useState } from 'react'
+import React from 'react'
 import { TextInput } from 'react-native-paper'
 import { View, StyleSheet, Text } from 'react-native'
 import { RoundedButton } from '../../components/RoundedButton'
-import { fontSizes } from '../../utils/sizes'
+import * as Theme from '../../utils/theme'
 
 
-export const Focus = ({ addSubject }) => {
+interface Props {
+    addSubject: (focusItem: string) => void
+}
+
+export const Focus: React.FC<Props> = ({ addSubject }) => {
   
-    const [focusItem, setFocusItem] = useState(null)
+    const [ subject, setSubject ] = React.useState<string>(null)
 
-    const onSubmitEditingHandler = useCallback(({ nativeEvent: { text } }) => setFocusItem(text), [])
+    const onSubmitEditingHandler = React.useCallback(({ nativeEvent: { text } }) => {
+        setSubject(text)
+    }, [])
 
-    const onPressHandler = useCallback(() => addSubject(focusItem), [focusItem])
+    const onPressHandler = React.useCallback(() => {
+        addSubject(subject)
+    }, [subject])
   
     return (
         <View style={styles.titleContainer}>
             <Text style={styles.title}>What would you like to focus on?</Text>
             <View style={styles.container}>
                 <TextInput
-                    style={{ flex: 1 }}
+                    style={styles.textInput}
                     maxLength={50}
-                    value={focusItem}
+                    value={subject}
                     onSubmitEditing={onSubmitEditingHandler}
+                    onChangeText={setSubject}
+                    label={'Add item'}
                 />
                 <RoundedButton
                     style={styles.addSubject}
                     size={50}
                     title='+'
-                    onPress={onPressHandler}
+                    onPressHandler={onPressHandler}
                 />
             </View>
         </View>
@@ -49,8 +59,9 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         padding: 16,
-        fontSize: fontSizes.lg,
+        fontSize: Theme.fontSizes.lg,
     },
+    textInput: { flex: 1 },
     addSubject: { 
         marginLeft: 10, 
         alignSelf: 'center' 

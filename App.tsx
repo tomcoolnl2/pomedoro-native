@@ -3,31 +3,33 @@ import React from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, View } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import type { FocusSubject } from './src/model'
 import { uuidv4 } from './src/utils/uuid'
 import { Timer } from './src/features/timer/Timer'
 import { Focus } from './src/features/focus/Focus'
 import { FocusHistory } from './src/features/focus/FocusHistory'
 
 
-const App: React.FC = () => {
+// expo requires a default exports
+export const App: React.FC = () => {
 
-    const [ focusSubject, setFocusSubject ] = React.useState(null)
-    const [ focusHistory, setFocusHistory ] = React.useState([])
+    const [ currentSubject, setCurrentSubject ] = React.useState<string>(null)
+    const [ subjectHistory, setSubjectHistory ] = React.useState<FocusSubject[]>([])
 
     const saveFocusHistory = React.useCallback(async () => {
         try {
-            await AsyncStorage.setItem('focusHistory', JSON.stringify(focusHistory))
+            await AsyncStorage.setItem('subjectHistory', JSON.stringify(subjectHistory))
         } catch (e) {
             console.error(e)
         }
-    }, [])
+    }, [subjectHistory])
 
     const loadFocusHistory = React.useCallback(async () => {
         try {
-            const history = await AsyncStorage.getItem('focusHistory')
-            const focusHistory = JSON.parse(history)
-            if (history && focusHistory.length) {
-                setFocusHistory(focusHistory)
+            const history = await AsyncStorage.getItem('subjectHistory')
+            const subjectHistory = JSON.parse(history)
+            if (history && subjectHistory.length > 0) {
+                setSubjectHistory(subjectHistory)
             }
         } catch (e) {
             console.error(e)
@@ -40,40 +42,40 @@ const App: React.FC = () => {
 
     React.useEffect(() => {
         saveFocusHistory()
-    }, [focusHistory])
+    }, [subjectHistory])
 
     const clearSubjectHandler = React.useCallback(() => {
-        setFocusHistory([
-            ...focusHistory,
-            { subject: focusSubject, status: 0, key: uuidv4() }
+        setSubjectHistory([
+            ...subjectHistory,
+            { subject: currentSubject, status: 0, key: uuidv4() }
         ])
-        setFocusSubject(null)
-    }, [focusHistory])
+        setCurrentSubject(null)
+    }, [subjectHistory])
 
     const onTimerEndHandler = React.useCallback(() => {
-        setFocusHistory([
-            ...focusHistory,
-            { subject: focusSubject, status: 1, key: uuidv4() }
+        setSubjectHistory([
+            ...subjectHistory,
+            { subject: currentSubject, status: 1, key: uuidv4() }
         ])
-        setFocusSubject(null)
-    }, [focusHistory])
+        setCurrentSubject(null)
+    }, [subjectHistory])
 
     return (
         <View style={styles.container}>
             <StatusBar style='light' />
-            {focusSubject 
+            {currentSubject 
                 ? (
                     <Timer
-                        subject={focusSubject}
+                        subject={currentSubject}
                         clearSubject={clearSubjectHandler}
                         onTimerEnd={onTimerEndHandler}
                     />
                 ) : (
                     <View style={styles.focusContainer}>
-                        <Focus addSubject={setFocusSubject} />
+                        <Focus addSubject={setCurrentSubject} />
                         <FocusHistory
-                            focusHistory={focusHistory}
-                            setFocusHistory={setFocusHistory}
+                            focusHistory={subjectHistory}
+                            setFocusHistory={setSubjectHistory}
                         />
                     </View>
                 )}
@@ -81,15 +83,14 @@ const App: React.FC = () => {
     )
 }
 
-// expo requires a default exports
-export default App
+export default App;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'teal'
     },
     focusContainer: { 
         flex: 1, 
-        backgroundColor: '#252250'
     }
 })

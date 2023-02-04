@@ -1,16 +1,17 @@
+
 import React from 'react'
-import {
-    View,
-    StyleSheet,
-    Text,
-    FlatList,
-    SafeAreaView
-} from 'react-native'
-import { fontSizes, paddingSizes } from '../../utils/sizes'
+import { View, StyleSheet, Text, FlatList, SafeAreaView } from 'react-native'
+import * as Theme from '../../utils/theme'
 import { RoundedButton } from '../../components/RoundedButton'
+import type { FocusSubject } from '../../model'
 
 
-export const FocusHistory = ({ focusHistory, setFocusHistory }) => {
+interface Props {
+    focusHistory: FocusSubject[]
+    setFocusHistory: (focusHistory: FocusSubject[]) => void
+}
+
+export const FocusHistory: React.FC<Props> = ({ focusHistory, setFocusHistory }) => {
   
     const clearHistory = React.useCallback(() => {
         setFocusHistory([])
@@ -18,40 +19,56 @@ export const FocusHistory = ({ focusHistory, setFocusHistory }) => {
 
     return (
         <>
-            <SafeAreaView style={{ flex: 0.5, alignItems: 'center' }}>
-                <Text style={{ fontSize: fontSizes.lg, color: 'white' }}>
+            <SafeAreaView style={styles.container}>
+                <Text style={styles.title}>
                     Things we've focused on
                 </Text>
-                {!!focusHistory.length && (
+                {focusHistory.length > 0 && (
                     <FlatList
-                        style={{ width: '100%', height: '100%', paddingTop: 16 }}
-                        contentContainerStyle={{ alignItems: 'center' }}
+                        style={styles.listStyle}
+                        contentContainerStyle={styles.contentContainerStyle}
                         data={focusHistory}
-                        renderItem={({ item }) => (
-                            <Text style={styles(item.status).historyItem}>
-                                {item.subject}
-                            </Text>
-                        )}
+                        renderItem={({ item }) => {
+                            console.log('item', item);
+                            return item.subject !== null && (
+                                <Text style={styles.historyItem}>
+                                    {`${item.status > 0 ? '✅' : '❌'} ${item.subject}`}
+                                </Text>
+                            )
+                        }}
                     />
                 )}
                 {!focusHistory.length && (
-                    <Text style={{ color: 'white' }}>Nothing yet</Text>
+                    <Text style={styles.text}>Nothing yet</Text>
                 )}
             </SafeAreaView>
-            <View style={styles().clearContainer}>
-                <RoundedButton size={75} title='Clear' onPress={() => clearHistory()} />
+            <View style={styles.clearContainer}>
+                <RoundedButton size={75} title='Clear' onPressHandler={clearHistory} />
             </View>
         </>
     )
 }
 
-const styles = (status = 0) => StyleSheet.create({
-    historyItem:{
-        color: status > 0 ? 'green' : 'red',
-        fontSize: fontSizes.md
+const styles = StyleSheet.create({
+    container: {
+        flex: 0.5,
+        alignItems: 'center'
+    },
+    title: { 
+        fontSize: Theme.fontSizes.lg, 
+        color: 'white'
+    },
+    text: { color: 'white' },
+    historyItem: {
+        color: 'white',
+        fontSize: Theme.fontSizes.md
     },
     clearContainer: {
         alignItems: 'center',
-        padding: paddingSizes.sm
+        padding: Theme.paddingSizes.sm
     },
+    listStyle: { width: '100%', height: '100%', paddingTop: 16 },
+    contentContainerStyle: {
+        alignItems: 'flex-start'
+    }
 })

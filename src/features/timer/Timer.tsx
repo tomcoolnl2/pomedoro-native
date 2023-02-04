@@ -1,3 +1,4 @@
+
 import React from 'react'
 import { View, StyleSheet, Vibration } from 'react-native'
 import { ProgressBar, Text } from 'react-native-paper'
@@ -7,51 +8,57 @@ import { useKeepAwake } from 'expo-keep-awake'
 import { RoundedButton } from '../../components/RoundedButton'
 import { Countdown } from '../../components/Countdown'
 import { Timing } from './Timing'
-
 import { bellSound } from '../../../assets/bell.mp3';
 
-export const Timer = ({ subject, clearSubject, onTimerEnd }) => {
+
+const ONE_SECOND_IN_MS = 1000
+const VIBRATION_PATTERN: number[] = Array.from({ length: 5 }, _ => 1 * ONE_SECOND_IN_MS)
+
+interface Props {
+    subject: string
+    clearSubject: () => void
+    onTimerEnd: () => void
+}
+
+export const Timer: React.FC<Props> = ({ subject, clearSubject, onTimerEnd }) => {
   
     useKeepAwake()
   
     const soundObject = new Audio.Sound()
 
     const [ minutes, setMinutes ] = React.useState<number>(0.1)
-    const [ isStarted, setStarted ] = React.useState<boolean>(false)
-    const [ pauseCounter, setPauseCounter ] = React.useState(0)
+    const [ isStarted, setIsStarted ] = React.useState<boolean>(false)
+    const [ pauseCounter, setPauseCounter ] = React.useState<number>(0)
     const [ progress, setProgress ] = React.useState<number>(1)
 
-    const onProgress = React.useCallback((p: number): void => {
+    const onProgress = (p: number) => {
         setProgress(p / 100)
-    }, [])
+    }
 
-    const onPause = React.useCallback((): void => {
+    const onPause = React.useCallback(() => {
         setPauseCounter(pauseCounter + 1)
     }, [pauseCounter])
 
-    const onEnd = React.useCallback(async (): Promise<void> => {
+    const onEnd = React.useCallback(async () => {
         try {
             await soundObject.loadAsync(bellSound)
             await soundObject.playAsync()
-            const interval = setInterval(() => Vibration.vibrate(5000), 1000)
-            setTimeout(() => {
-                clearInterval(interval)
-            }, 10000)
+            Vibration.vibrate(VIBRATION_PATTERN)
         } catch (error) {
             console.log(error)
         }
 
         setProgress(1)
-        setStarted(false)
+        setIsStarted(false)
         setMinutes(20)
         onTimerEnd()
     }, [])
 
-    const changeTime = (min: number) => {
+    const changeTime = React.useCallback((min: number) => {
         setProgress(1)
-        setStarted(false)
+        setIsStarted(false)
         setMinutes(min)
-    }
+    }, [])
 
     React.useEffect(() => {
         return () => {
@@ -69,7 +76,7 @@ export const Timer = ({ subject, clearSubject, onTimerEnd }) => {
                     onEnd={onEnd}
                     onProgress={onProgress}
                 />
-                <View style={{ padding: 50 }}>
+                <View style={styles.currentSubject}>
                     <Text style={styles.title}>Focusing on:</Text>
                     <Text style={styles.task}>{subject}</Text>
                 </View>
@@ -78,7 +85,7 @@ export const Timer = ({ subject, clearSubject, onTimerEnd }) => {
                 <ProgressBar
                     progress={progress}
                     color='#5E84E2'
-                    style={{ height: 10 }}
+                    style={styles.progress}
                 />
             </View>
 
@@ -87,14 +94,10 @@ export const Timer = ({ subject, clearSubject, onTimerEnd }) => {
             </View>
 
             <View style={styles.buttonWrapper}>
-                {!isStarted ? (
-                    <RoundedButton title='start' onPress={() => setStarted(true)} />
-                ) : (
-                    <RoundedButton title='pause' onPress={() => setStarted(false)} />
-                )}
+                <RoundedButton title={!isStarted ? 'start' : 'pause'} onPressHandler={() => setIsStarted(!isStarted)} />
             </View>
             <View style={styles.clearSubject}>
-                <RoundedButton title='-' size={50} onPress={() => clearSubject()} />
+                <RoundedButton title='-' size={50} onPressHandler={clearSubject} />
             </View>
         </View>
     )
@@ -102,7 +105,6 @@ export const Timer = ({ subject, clearSubject, onTimerEnd }) => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#252250',
         flex: 1,
     },
     countdown: {
@@ -112,14 +114,17 @@ const styles = StyleSheet.create({
     },
     title: { color: 'white', textAlign: 'center' },
     task: { color: 'white', fontWeight: 'bold', textAlign: 'center' },
+    currentSubject: { padding: 50 },
+    progress: { height: 10 },
     buttonWrapper: {
-        flex: .3,
         flexDirection: 'row',
+        flex: .3,
         alignItems: 'center',
+        justifyContent: 'center',
         padding: 15,
     },
     clearSubject: {
         paddingBottom: 25,
-        paddingLeft: 25,
+        paddingLeft: 25
     },
 })
