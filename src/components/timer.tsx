@@ -4,10 +4,10 @@ import { View, StyleSheet, Vibration } from 'react-native'
 import { ProgressBar, Text } from 'react-native-paper'
 import { Audio } from 'expo-av'
 import { useKeepAwake } from 'expo-keep-awake'
-// import { bellSound } from '../../assets/bell.mp3';
 import { VIBRATION_PATTERN } from '../utils'
 import { Theme } from '../theme'
 import { Button, Countdown, TimerOptions } from './'
+import alarmMp3 from '../../assets/alarm.mp3';
 
 
 interface Props {
@@ -19,13 +19,32 @@ interface Props {
 export const Timer: React.FC<Props> = ({ subject, clearSubject, onTimerEnd }) => {
   
     useKeepAwake()
-  
-    // const soundObject = new Audio.Sound()
 
     const [ minutes, setMinutes ] = React.useState<number>(0.1)
     const [ isStarted, setIsStarted ] = React.useState<boolean>(false)
     const [ pauseCounter, setPauseCounter ] = React.useState<number>(0)
     const [ progress, setProgress ] = React.useState<number>(1)
+    const [ sound, setSound ] = React.useState<Audio.Sound>(null)
+    const [ soundIsPlaying, setSoundIsPlaying ] = React.useState<boolean>(false)
+ 
+    const playSound = React.useCallback(async () => {
+        const { sound } = await Audio.Sound.createAsync(alarmMp3);
+        setSound(sound)
+        sound.stopAsync()
+        setSoundIsPlaying(true)
+        await sound.playAsync()
+    }, []);
+
+    const stopSound = React.useCallback(async () => {
+        setSoundIsPlaying(false)
+        sound.stopAsync()
+    }, [sound])
+
+    React.useEffect(() => {
+        return sound
+            ? () => { sound.unloadAsync() }
+            : undefined
+    }, [])
 
     const onProgress = React.useCallback((progress: number) => {
         setProgress(progress / 100)
@@ -37,8 +56,7 @@ export const Timer: React.FC<Props> = ({ subject, clearSubject, onTimerEnd }) =>
 
     const onEnd = React.useCallback(async () => {
         try {
-            // await soundObject.loadAsync(bellSound)
-            // await soundObject.playAsync()
+            await playSound()
             Vibration.vibrate(VIBRATION_PATTERN)
         } catch (error) {
             console.log(error)
@@ -55,12 +73,6 @@ export const Timer: React.FC<Props> = ({ subject, clearSubject, onTimerEnd }) =>
         setIsStarted(false)
         setMinutes(min)
     }, [])
-
-    // React.useEffect(() => {
-    //     return () => {
-    //         soundObject.unloadAsync()
-    //     }
-    // }, [])
 
     return (
         <View style={styles.container}>

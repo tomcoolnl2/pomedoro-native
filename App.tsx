@@ -1,17 +1,32 @@
 
 import React from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, View, Image } from 'react-native'
-import { LinearGradient } from 'expo-linear-gradient';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Audio, AVPlaybackStatus } from 'expo-av'
+import { LinearGradient } from 'expo-linear-gradient'
 import type { FocusSubject } from './src/model'
 import { Theme } from './src/theme'
 import { uuidv4 } from './src/utils'
-import { Timer, AddSubject, SubjectHistory } from './src/components'
+import { Timer, AddSubject, SubjectHistory, Button } from './src/components'
 import { Icon } from './images';
+
 
 const App: React.FC = () => {
 
+    React.useEffect(() => {
+        (async () => {
+            await Audio.requestPermissionsAsync();
+            await Audio.setAudioModeAsync({
+                staysActiveInBackground: true,
+                shouldDuckAndroid: false,
+                playThroughEarpieceAndroid: false,
+                allowsRecordingIOS: false,
+                playsInSilentModeIOS: true,
+            })
+        })()
+    }, [])
+    
     const [ currentSubject, setCurrentSubject ] = React.useState<string>(null)
     const [ subjectHistory, setSubjectHistory ] = React.useState<FocusSubject[]>([])
 
@@ -43,6 +58,10 @@ const App: React.FC = () => {
         saveSubjectHistory()
     }, [subjectHistory])
 
+    const clearHistory = React.useCallback(() => {
+        setSubjectHistory([])
+    }, [setSubjectHistory])
+
     const clearSubjectHandler = React.useCallback(() => {
         setSubjectHistory([
             ...subjectHistory,
@@ -58,6 +77,10 @@ const App: React.FC = () => {
         ])
         setCurrentSubject(null)
     }, [currentSubject, subjectHistory])
+
+    const stopSound = React.useCallback(async (sound: Audio.Sound): Promise<AVPlaybackStatus> => {
+        return await sound.stopAsync()
+    }, [])
 
     return (
         <View style={styles.container}>
@@ -77,10 +100,13 @@ const App: React.FC = () => {
                     />
                     : <View style={styles.subjectContainer}>
                         <AddSubject addSubject={setCurrentSubject} />
-                        <SubjectHistory
-                            subjectHistory={subjectHistory}
-                            setSubjectHistory={setSubjectHistory}
-                        />
+                        <SubjectHistory subjectHistory={subjectHistory} />
+                        <View style={styles.clearContainer}>
+                            <Button size={75} onPressHandler={stopSound} icon={Icon.Mute} />
+                        </View>
+                        <View style={styles.clearContainer}>
+                            <Button size={75} title='Clear' onPressHandler={clearHistory} />
+                        </View>
                     </View>}
             </ LinearGradient>
         </View>
@@ -103,7 +129,11 @@ const styles = StyleSheet.create({
     },
     subjectContainer: { 
         flex: 1, 
-    }
+    },
+    clearContainer: {
+        alignItems: 'center',
+        padding: Theme.size.sm
+    },
 })
 
 // expo requires a default exports

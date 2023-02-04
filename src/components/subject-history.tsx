@@ -3,21 +3,13 @@ import React from 'react'
 import { View, StyleSheet, Text, FlatList, SafeAreaView } from 'react-native'
 import type { FocusSubject } from '../model'
 import { Theme } from '../theme'
-import { Button } from './button'
 
 
 interface Props {
     subjectHistory: FocusSubject[]
-    setSubjectHistory: (subjectHistory: FocusSubject[]) => void
 }
 
-export const SubjectHistory: React.FC<Props> = ({ subjectHistory, setSubjectHistory }) => {
-  
-    const clearHistory = React.useCallback(() => {
-        setSubjectHistory([])
-    }, [setSubjectHistory])
-    
-    console.log('subjectHistory', subjectHistory)
+export const SubjectHistory: React.FC<Props> = ({ subjectHistory }) => {
 
     return (
         <>
@@ -43,9 +35,6 @@ export const SubjectHistory: React.FC<Props> = ({ subjectHistory, setSubjectHist
                     : <Text style={styles.text}>No focus at all...</Text>
                 }
             </SafeAreaView>
-            <View style={styles.clearContainer}>
-                <Button size={75} title='Clear' onPressHandler={clearHistory} />
-            </View>
         </>
     )
 }
@@ -57,10 +46,6 @@ const styles = StyleSheet.create({
     },
     title: Theme.title,
     text: Theme.text,
-    clearContainer: {
-        alignItems: 'center',
-        padding: Theme.size.sm
-    },
     listStyle: { 
         width: '40%',
         paddingTop: Theme.size.md
@@ -73,7 +58,7 @@ const styles = StyleSheet.create({
         backgroundColor: Theme.color.white,
         paddingVertical: Theme.size.sm,
         paddingHorizontal: Theme.size.md,
-        marginTop: Theme.size.sm,
+        marginBottom: Theme.size.sm,
         width: '100%',
         textAlign: 'left'
     }
