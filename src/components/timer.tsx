@@ -4,7 +4,7 @@ import { View, StyleSheet, Vibration } from 'react-native'
 import { ProgressBar, Text } from 'react-native-paper'
 import { Audio } from 'expo-av'
 import { useKeepAwake } from 'expo-keep-awake'
-import { bellSound } from '../../assets/bell.mp3';
+// import { bellSound } from '../../assets/bell.mp3';
 import { VIBRATION_PATTERN } from '../utils'
 import { Theme } from '../theme'
 import { Button, Countdown, TimerOptions } from './'
@@ -20,7 +20,7 @@ export const Timer: React.FC<Props> = ({ subject, clearSubject, onTimerEnd }) =>
   
     useKeepAwake()
   
-    const soundObject = new Audio.Sound()
+    // const soundObject = new Audio.Sound()
 
     const [ minutes, setMinutes ] = React.useState<number>(0.1)
     const [ isStarted, setIsStarted ] = React.useState<boolean>(false)
@@ -37,8 +37,8 @@ export const Timer: React.FC<Props> = ({ subject, clearSubject, onTimerEnd }) =>
 
     const onEnd = React.useCallback(async () => {
         try {
-            await soundObject.loadAsync(bellSound)
-            await soundObject.playAsync()
+            // await soundObject.loadAsync(bellSound)
+            // await soundObject.playAsync()
             Vibration.vibrate(VIBRATION_PATTERN)
         } catch (error) {
             console.log(error)
@@ -56,11 +56,11 @@ export const Timer: React.FC<Props> = ({ subject, clearSubject, onTimerEnd }) =>
         setMinutes(min)
     }, [])
 
-    React.useEffect(() => {
-        return () => {
-            soundObject.unloadAsync()
-        }
-    }, [])
+    // React.useEffect(() => {
+    //     return () => {
+    //         soundObject.unloadAsync()
+    //     }
+    // }, [])
 
     return (
         <View style={styles.container}>
@@ -111,20 +111,20 @@ const styles = StyleSheet.create({
     title: Theme.title,
     text: Theme.text,
     currentSubject: { 
-        padding: Theme.padding.xxl
+        padding: Theme.size.xxl
     },
     progress: { 
-        height: Theme.padding.sm
+        height: Theme.size.sm
     },
     buttonWrapper: {
         flexDirection: 'row',
         flex: .3,
         alignItems: 'center',
         justifyContent: 'center',
-        padding: Theme.padding.md,
+        padding: Theme.size.md,
     },
     clearSubject: {
-        paddingBottom: Theme.padding.lg,
-        paddingLeft: Theme.padding.lg
+        paddingBottom: Theme.size.lg,
+        paddingLeft: Theme.size.lg
     },
 })

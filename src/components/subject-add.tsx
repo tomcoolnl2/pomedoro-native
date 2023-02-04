@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     },
     titleContainer: { 
         flex: 0.4, 
-        padding: Theme.padding.md,
+        padding: Theme.size.md,
         justifyContent: 'center' 
     },
     title: {
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     addSubjectCTA: { 
-        marginLeft: Theme.padding.md, 
+        marginLeft: Theme.size.md, 
         alignSelf: 'center' 
     },
 })

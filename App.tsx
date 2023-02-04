@@ -96,9 +96,9 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     image: {
-        width: Theme.padding.xxxl, 
-        height: Theme.padding.xxxl,
-        marginTop: Theme.padding.xxxl,
+        width: Theme.size.xxxl, 
+        height: Theme.size.xxxl,
+        marginTop: Theme.size.xxxl,
         alignSelf: 'center'
     },
     subjectContainer: { 

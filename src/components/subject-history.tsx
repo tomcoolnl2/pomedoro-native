@@ -23,13 +23,12 @@ export const SubjectHistory: React.FC<Props> = ({ subjectHistory, setSubjectHist
                 <Text style={styles.title}>
                     Things we've focused on
                 </Text>
-                {subjectHistory.length > 0 && (
-                    <FlatList
+                {subjectHistory.length > 0 
+                    ? <FlatList
                         style={styles.listStyle}
                         contentContainerStyle={styles.contentContainerStyle}
                         data={subjectHistory}
                         renderItem={({ item }) => {
-                            console.log('item', item);
                             return item.subject !== null && (
                                 <Text style={styles.text}>
                                     {`${item.status > 0 ? '✅' : '❌'} ${item.subject}`}
@@ -37,7 +36,8 @@ export const SubjectHistory: React.FC<Props> = ({ subjectHistory, setSubjectHist
                             )
                         }}
                     />
-                )}
+                    : <Text style={styles.title}>No focus at all...</Text>
+                }
                 {!subjectHistory.length && (
                     <Text style={styles.text}>Nothing yet</Text>
                 )}
@@ -58,12 +58,12 @@ const styles = StyleSheet.create({
     text: Theme.text,
     clearContainer: {
         alignItems: 'center',
-        padding: Theme.padding.sm
+        padding: Theme.size.sm
     },
     listStyle: { 
         width: '100%', 
         height: '100%', 
-        paddingTop: Theme.padding.md
+        paddingTop: Theme.size.md
     },
     contentContainerStyle: {
         alignItems: 'flex-start'

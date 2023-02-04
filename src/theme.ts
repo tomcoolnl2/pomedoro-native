@@ -1,6 +1,6 @@
 import { TextStyle } from "react-native"
 
-const fontSize = {
+const size = {
     sm: 8,
     md: 16,
     lg: 24,
@@ -9,14 +9,14 @@ const fontSize = {
     xxxl: 80,
 }
 
-const padding = {
-    ...fontSize,
+const fontSize = {
+    ...size,
 }
 
 const textShadow = {
     textShadowColor: 'rgba(52, 40, 44, 0.75)',
     textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: padding.sm / 2
+    textShadowRadius: size.sm / 2
 }
 
 const color = {
@@ -38,7 +38,7 @@ const title = {
     ...text,
     fontSize: fontSize.lg,
     fontWeight: 'bold',
-    padding: padding.md,
+    size: size.md,
 } as TextStyle
 
 export const Theme = {
@@ -46,5 +46,5 @@ export const Theme = {
     title,
     text,
     fontSize,
-    padding,
+    size,
 }

@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         ...Theme.text,
         fontSize: Theme.fontSize.xxxl,
         fontWeight: 'bold',
-        padding: Theme.padding.lg,
+        padding: Theme.size.lg,
         backgroundColor: Theme.color.tomato,
     }
 })
