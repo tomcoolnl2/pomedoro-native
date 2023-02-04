@@ -13,6 +13,12 @@ const padding = {
     ...fontSize,
 }
 
+const textShadow = {
+    textShadowColor: 'rgba(52, 40, 44, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: padding.sm / 2
+}
+
 const color = {
     indianred: 'indianred',
     tomato: 'tomato',
@@ -25,6 +31,7 @@ const text = {
     color: color.cornsilk,
     fontSize: fontSize.md,
     textAlign: 'center',
+    ...textShadow
 } as TextStyle
 
 const title = {

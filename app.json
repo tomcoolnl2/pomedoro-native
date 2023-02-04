@@ -4,9 +4,9 @@
     "slug": "FocusTime",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./images/tomato.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./images/tomato.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -25,7 +25,7 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./images/favicon.png"
     }
   }
 }
